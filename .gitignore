@@ -1,39 +1,37 @@
-# Build results
+# Build outputs
 [Bb]in/
 [Oo]bj/
+out/
 
 # User-specific files
 *.user
 *.rsuser
 *.suo
-*.userosscache
-*.sln.docstates
 
-# IDE / Editor
+# IDE folders
 .vs/
 .vscode/
 .idea/
+
+# Logs
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+appsettings.Development.json
+appsettings.*.local.json
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# Test results
+# Test & coverage
 TestResults/
-*.trx
+coverage/
 *.coverage
 *.coveragexml
 
 # NuGet
 *.nupkg
 *.snupkg
-
-# Publish output
-publish/
-out/
-
-# Generated files
-Generated/
