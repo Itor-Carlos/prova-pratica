@@ -7,10 +7,12 @@ namespace TesteTecnico.Presentation.Middlewares;
 public class GlobalExceptionMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionMiddleware> _logger;
 
-    public GlobalExceptionMiddleware(RequestDelegate next)
+    public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -21,10 +23,12 @@ public class GlobalExceptionMiddleware
         }
         catch (DomainException ex)
         {
+            _logger.LogWarning(ex, "Erro de domínio durante o processamento da requisição.");
             await WriteErrorAsync(context, HttpStatusCode.BadRequest, ex.Message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Erro não tratado durante o processamento da requisição.");
             await WriteErrorAsync(context, HttpStatusCode.InternalServerError, "Erro interno no servidor.");
         }
     }

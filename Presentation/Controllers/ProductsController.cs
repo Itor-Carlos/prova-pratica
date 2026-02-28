@@ -16,6 +16,14 @@ public class ProductsController : ControllerBase
         _productService = productService;
     }
 
+    /// <summary>
+    /// Cadastra um novo produto.
+    /// </summary>
+    /// <param name="request">Dados do produto a ser criado.</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação.</param>
+    /// <returns>Produto criado.</returns>
+    /// <response code="201">Produto criado com sucesso.</response>
+    /// <response code="400">Requisição inválida.</response>
     [HttpPost]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -25,6 +33,15 @@ public class ProductsController : ControllerBase
         return Created($"/api/products/{product.Id}", product);
     }
 
+    /// <summary>
+    /// Atualiza um produto existente.
+    /// </summary>
+    /// <param name="id">Identificador do produto.</param>
+    /// <param name="request">Novos dados do produto.</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação.</param>
+    /// <returns>Produto atualizado.</returns>
+    /// <response code="200">Produto atualizado com sucesso.</response>
+    /// <response code="404">Produto não encontrado.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,6 +51,14 @@ public class ProductsController : ControllerBase
         return product is null ? NotFound() : Ok(product);
     }
 
+    /// <summary>
+    /// Remove um produto.
+    /// </summary>
+    /// <param name="id">Identificador do produto.</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação.</param>
+    /// <returns>Sem conteúdo quando removido.</returns>
+    /// <response code="204">Produto removido com sucesso.</response>
+    /// <response code="404">Produto não encontrado.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,6 +68,16 @@ public class ProductsController : ControllerBase
         return deleted ? NoContent() : NotFound();
     }
 
+    /// <summary>
+    /// Lista produtos com filtros opcionais.
+    /// </summary>
+    /// <param name="category">Filtro por categoria.</param>
+    /// <param name="minPrice">Preço mínimo para filtro.</param>
+    /// <param name="maxPrice">Preço máximo para filtro.</param>
+    /// <param name="status">Status do produto (Active/Inactive).</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação.</param>
+    /// <returns>Lista de produtos filtrada.</returns>
+    /// <response code="200">Consulta realizada com sucesso.</response>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<ProductResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
@@ -64,11 +99,20 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
+    /// <summary>
+    /// Realiza upload da imagem de um produto.
+    /// </summary>
+    /// <param name="id">Identificador do produto.</param>
+    /// <param name="file">Arquivo de imagem.</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação.</param>
+    /// <returns>Produto com URL da imagem atualizada.</returns>
+    /// <response code="200">Imagem enviada com sucesso.</response>
+    /// <response code="404">Produto não encontrado.</response>
     [HttpPost("{id:guid}/image")]
     [Consumes("multipart/form-data")]
     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UploadImage(Guid id, [FromForm] IFormFile file, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadImage(Guid id, IFormFile file, CancellationToken cancellationToken)
     {
         var product = await _productService.UploadImageAsync(id, file, cancellationToken);
         return product is null ? NotFound() : Ok(product);
