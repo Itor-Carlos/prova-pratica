@@ -54,7 +54,7 @@ Estes itens não são obrigatórios, mas contam pontos na avaliação:
 
 ---
 
-## 🧱 Arquitetura e Estrutura do Código
+## Arquitetura e Estrutura do Código
 
 O projeto segue arquitetura em camadas, separando responsabilidades entre apresentação, aplicação, domínio e infraestrutura.
 
@@ -100,7 +100,52 @@ dotnet test "TesteTecnico.Tests/TesteTecnico.Tests.csproj" -v minimal
 
 ---
 
-## 🐳 Docker
+## Rodando sem Docker
+
+### Pré-requisitos
+
+- .NET SDK 8.0+
+- PostgreSQL 16+ em execução local
+
+### 1) Criar banco e tabela localmente
+
+Crie o banco `product_catalog` no seu PostgreSQL e execute o script SQL abaixo (o mesmo usado no bootstrap do Docker):
+
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS products (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(200) NOT NULL,
+  description TEXT NOT NULL,
+  category VARCHAR(150) NOT NULL,
+  price NUMERIC(18,2) NOT NULL CHECK (price > 0),
+  status INTEGER NOT NULL,
+  image_url VARCHAR(500),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+### 2) Validar connection string
+
+No arquivo `appsettings.json`, ajuste `ConnectionStrings:DefaultConnection` para sua instância local (usuário/senha/porta).
+
+### 3) Restaurar dependências e executar
+
+```bash
+dotnet restore
+dotnet run --project TesteTecnico.csproj
+```
+
+Após subir a API:
+
+- API: `http://localhost:5000`
+- Swagger: `http://localhost:5000/swagger`
+
+---
+
+## Rodando utilizando Docker
 
 Para subir a API e o PostgreSQL com Docker Compose:
 
