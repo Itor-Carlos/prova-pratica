@@ -54,6 +54,18 @@ Estes itens não são obrigatórios, mas contam pontos na avaliação:
 
 ---
 
+## 🧪 Testes
+
+Para executar apenas os testes unitários implementados no projeto:
+
+Escopo atual dos testes: regras de domínio de `Product` (nome e categoria obrigatórios, preço maior que zero e normalização de textos com `trim`).
+
+```bash
+dotnet test "TesteTecnico.Tests/TesteTecnico.Tests.csproj" -v minimal
+```
+
+---
+
 ## 🚀 Como Entregar
 
 1. Faça um **fork deste repositório** ou clone e crie um repositório público seu.
