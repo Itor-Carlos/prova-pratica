@@ -40,6 +40,37 @@ public class ProductService : IProductService
         return ProductResponse.FromEntity(product);
     }
 
+    public async Task<ProductResponse?> PatchAsync(Guid id, PatchProductRequest request, CancellationToken cancellationToken = default)
+    {
+        var product = await _repository.GetByIdAsync(id, cancellationToken);
+        if (product is null)
+        {
+            return null;
+        }
+
+        var hasAnyField = request.Name is not null
+            || request.Description is not null
+            || request.Category is not null
+            || request.Price.HasValue
+            || request.Status.HasValue;
+
+        if (!hasAnyField)
+        {
+            return ProductResponse.FromEntity(product);
+        }
+
+        var name = request.Name ?? product.Name;
+        var description = request.Description ?? product.Description;
+        var category = request.Category ?? product.Category;
+        var price = request.Price ?? product.Price;
+        var status = request.Status ?? product.Status;
+
+        product.Update(name, description, category, price, status);
+        await _repository.UpdateAsync(product, cancellationToken);
+
+        return ProductResponse.FromEntity(product);
+    }
+
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var product = await _repository.GetByIdAsync(id, cancellationToken);
