@@ -66,6 +66,35 @@ dotnet test "TesteTecnico.Tests/TesteTecnico.Tests.csproj" -v minimal
 
 ---
 
+## 🐳 Docker
+
+Para subir a API e o PostgreSQL com Docker Compose:
+
+```bash
+docker compose up --build -d
+```
+
+Após subir os containers:
+
+- API: `http://localhost:5000`
+- Swagger: `http://localhost:5000/swagger`
+
+Para parar os containers:
+
+```bash
+docker compose down
+```
+
+Observação: o PostgreSQL executa o script de inicialização em `docker/db/init/01-init-products.sql` apenas na primeira criação do volume.
+Se precisar recriar banco/tabelas do zero:
+
+```bash
+docker compose down -v
+docker compose up --build -d
+```
+
+---
+
 ## 🚀 Como Entregar
 
 1. Faça um **fork deste repositório** ou clone e crie um repositório público seu.

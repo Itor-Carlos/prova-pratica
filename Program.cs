@@ -11,6 +11,10 @@ using TesteTecnico.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var webRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+Directory.CreateDirectory(webRootPath);
+builder.WebHost.UseWebRoot(webRootPath);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
