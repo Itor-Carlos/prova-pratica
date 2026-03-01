@@ -54,6 +54,40 @@ Estes itens não são obrigatórios, mas contam pontos na avaliação:
 
 ---
 
+## 🧱 Arquitetura e Estrutura do Código
+
+O projeto segue arquitetura em camadas, separando responsabilidades entre apresentação, aplicação, domínio e infraestrutura.
+
+### Visão em camadas
+
+- **Presentation**: Controllers HTTP e middleware global de exceções.
+- **Application**: Casos de uso, contratos e DTOs para entrada/saída da API.
+- **Domain**: Entidades, regras de negócio, enums, exceções e contratos de repositório.
+- **Infrastructure**: Persistência com EF Core/PostgreSQL e armazenamento local de imagens.
+
+### Estrutura principal de pastas
+
+- `Presentation/`
+  - `Controllers/ProductsController.cs`
+  - `Middlewares/GlobalExceptionMiddleware.cs`
+- `Application/`
+  - `DTOs/` (requests/responses)
+  - `Interfaces/` (contratos de serviço/armazenamento)
+  - `Services/ProductService.cs`
+- `Domain/`
+  - `Entities/Product.cs`
+  - `Enums/ProductStatus.cs`
+  - `Exceptions/DomainException.cs`
+  - `Repositories/IProductRepository.cs`
+- `Infrastructure/`
+  - `Persistence/AppDbContext.cs`
+  - `Persistence/Repositories/ProductRepository.cs`
+  - `Storage/LocalStorageService.cs`
+- `TesteTecnico.Tests/`
+  - Testes unitários de regras de domínio da entidade `Product`
+
+---
+
 ## 🧪 Testes
 
 Para executar apenas os testes unitários implementados no projeto:
